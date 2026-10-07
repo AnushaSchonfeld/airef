@@ -152,6 +152,8 @@ body{font-family:"Nunito",system-ui,sans-serif;background:#0b3326;color:var(--in
 .qchoices{display:flex;flex-direction:column;gap:10px;align-items:center;padding:6px 0 20px;width:100%}
 .qbtn{width:auto;max-width:296px;min-width:180px;padding:13px 18px;font-size:17px;line-height:1.15;text-align:center}
 
+.credit{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-family:"Baloo 2";font-weight:700;font-size:15px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.credit a{color:#fff;text-decoration:underline;text-underline-offset:3px;padding:8px 2px}
 .fade{animation:fade .35s} @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -191,7 +193,7 @@ const STRINGS = {
     ph_desc:"See how real games use AI to call the line. Then train your own AI ref!",
     inWord:"IN", outWord:"OUT", inCall:"IN!", outCall:"OUT!",
     yes:"Yes!", lookAgain:"Look again",
-    testNow:"Test it!", warm:"Easy one first!", thinking:"Hmm…", next:"Next", again:"Play again", lvl:"Level",
+    testNow:"Test it!", warm:"Easy one first!", thinking:"Hmm…", next:"Next", again:"Play again", madeBy:"Made by", lvl:"Level",
 
     /* L1 opener — only IN examples */
     l1_banner:"Teach Ref-Bot", l1_ask:"IN or OUT?", l1_learned:"All done!",
@@ -309,7 +311,7 @@ const STRINGS = {
     warm:"पहले एक आसान!",
     thinking:"हम्म…",
     next:"आगे",
-    again:"फिर से खेलें",
+    again:"फिर से खेलें", madeBy:"द्वारा बनाया गया",
     lvl:"स्तर",
     l1_banner:"Ref-Bot को सिखाओ",
     l1_ask:"IN या OUT?",
@@ -846,8 +848,12 @@ function outroVideo(){
     m.querySelector(".go").onclick=endScreen;
   }
 }
+/* attribution link; opens in a new tab so the game (and any iframe embed) stays put */
+const NUSH_LINK=`<a href="https://thenushproject.org" target="_blank" rel="noopener">The Nush Project</a>`;
+function credit(m,txt){ const c=el(`<div class="credit fade">${txt}</div>`); stage.appendChild(c); return m; }
 function endScreen(){
   const m=screen(`${bot("proud")}<div class="say good">${T.recapTitle}</div><button class="go">\u21bb ${T.again}</button>`);
+  credit(m, LANG==="hi" ? `${NUSH_LINK} ${T.madeBy}` : `${T.madeBy} ${NUSH_LINK}`);
   m.querySelector(".go").onclick=()=>{resetPips();sceneIntro();};
 }
 
@@ -872,6 +878,7 @@ function langSelect(){
     <div class="choices" style="margin-top:18px">
       <button class="btn n" data-l="en" style="width:150px">English</button>
       <button class="btn n" data-l="hi" style="width:150px">\u0939\u093f\u0902\u0926\u0940</button></div>`);
+  credit(m, `Made by ${NUSH_LINK}`);
   m.querySelectorAll(".btn").forEach(b=>b.onclick=()=>{ setLang(b.dataset.l); buildLevelBar(); buildGlossary(); introVideo(); });
 }
 
